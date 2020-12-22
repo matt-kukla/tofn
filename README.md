@@ -1,7 +1,7 @@
 # tofn
 Typed ordered fuzzy numbers in OCaml.  Based on the definitions and constructions in [Rings of Typed Ordered Fuzzy Numbers](https://arxiv.org/abs/2010.07764)
 
-##Author
+## Author
 * [Matt Kukla](https://matt-kukla.github.io) (<matt.kukla@yandex.ru>)
 
 ## License

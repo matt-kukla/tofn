@@ -33,7 +33,7 @@ let (|*|) x y =
 
 let (|/|) x y = 
     if y.au == 0. || y.bu == 0. || y.ad == 0. || y.bd == 0. then raise Division_by_zero 
-    else tuplemap (/.) x y
+    else if sametype x y then tuplemap (/.) x y else raise OFN_type_mismatch
 
 let is_proper x = (x.au <= x.bu  && x.bu <= x.ad && x.ad <= x.bd) ||
                   (x.au >= x.bu  && x.bu >= x.ad && x.ad >= x.bd) ||

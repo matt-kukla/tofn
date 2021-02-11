@@ -51,6 +51,6 @@ val is_increasing : tofn -> bool
 (** Determine if an OFN is decreasing. *)
 val is_decreasing : tofn -> bool
 
-(** The membership function associated to an OFN.  Raises [Imroper_OFN] if the OFN 
+(** The membership function associated to an OFN.  Raises [Improper_OFN] if the OFN 
 is improper. *)
 val membership : tofn -> float -> float

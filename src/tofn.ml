@@ -21,6 +21,17 @@ let tuplemap f x y = {
     bd = f x.bd y.bd;
 }
 
+let tuplemap_safe f x y =
+    if sametype x y then {
+        ofn_type = x.ofn_type;
+        au = f x.au y.au;
+        bu = f x.bu y.bu;
+        ad =  f x.ad y.ad;
+        bd = f x.bd y.bd;
+    }
+    else raise OFN_type_mismatch
+
+
 (* Arithmetic operations *)
 let (|+|) x y = 
     if sametype x y then tuplemap (+.) x y else raise OFN_type_mismatch
@@ -35,8 +46,8 @@ let (|/|) x y =
     if y.au == 0. || y.bu == 0. || y.ad == 0. || y.bd == 0. then raise Division_by_zero 
     else if sametype x y then tuplemap (/.) x y else raise OFN_type_mismatch
 
-let is_proper x = (x.au <= x.bu  && x.bu <= x.ad && x.ad <= x.bd) ||
-                  (x.au >= x.bu  && x.bu >= x.ad && x.ad >= x.bd) ||
+let is_proper x = (x.au < x.bu  && x.bu < x.ad && x.ad < x.bd) ||
+                  (x.au > x.bu  && x.bu > x.ad && x.ad > x.bd) ||
                   (x.au = 0. && x.ad = 0. && x.bu <> 0. && x.bd <> 0.)
 
 let is_increasing x = (is_proper x) && (x.au > 0.) && (x.ad < 0.)
@@ -68,3 +79,4 @@ let membership x =
             | Gaussian -> (mem (fun z -> -2. *. log z) (fun z -> -0.5 *. (z**2.))) 
             | Exponential -> (mem (fun z -> exp z) (fun z -> log z))
 
+let conv_ofn x f = {ofn_type=f ; au = x.au; bu = x.bu; ad = x.ad; bd = x.bd;}

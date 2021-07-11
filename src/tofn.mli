@@ -35,7 +35,7 @@ val tuplemap_safe : (float -> float -> float) -> tofn -> tofn -> tofn
 val tuplemap : (float -> float -> float) -> tofn -> tofn -> tofn
 
 (**  Apply a binary operator to the essential tuples of two OFNs only when the
-types match.  Raises [OFN_type_mistmatch] if the arguments are not of the same
+types match.  Raises [OFN_type_mistmatch] if arguments are not of the same
 type. *)
 val tuplemap_safe : (float -> float -> float) -> tofn -> tofn -> tofn
 

@@ -27,10 +27,6 @@ type tofn = {
 (** Determine if two given OFNs are of the same type. *)
 val sametype : tofn -> tofn -> bool
 
-(**  Application of a binary operator to the essential tuples of two OFNs, only
-when the types match. *)
-val tuplemap_safe : (float -> float -> float) -> tofn -> tofn -> tofn
-
 (** Apply a binary operator to the essential tuples of two OFNs. *)
 val tuplemap : (float -> float -> float) -> tofn -> tofn -> tofn
 

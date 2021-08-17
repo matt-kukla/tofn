@@ -44,8 +44,8 @@ let (|/|) x y =
     then raise Division_by_zero 
     else tuplemap_safe (/.) x y 
 
-let is_proper x = (x.au < x.bu  && x.bu < x.ad && x.ad < x.bd) ||
-                  (x.au > x.bu  && x.bu > x.ad && x.ad > x.bd) ||
+let is_proper x = (x.au <= x.bu  && x.bu <= x.ad && x.ad <= x.bd) ||
+                  (x.au >= x.bu  && x.bu >= x.ad && x.ad >= x.bd) ||
                   (x.au = 0. && x.ad = 0. && x.bu <> 0. && x.bd <> 0.)
 
 let is_increasing x = (is_proper x) && (x.au > 0.) && (x.ad < 0.)

@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "tofn"
-version: "0.1"
+version: "0.11"
 synopsis: "Typed ordered fuzzy numbers"
 maintainer: "Matthew Kukla <matt.kukla@yandex.ru>"
 authors: "Matthew Kukla <matt.kukla@yandex.ru>"

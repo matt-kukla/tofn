@@ -7,5 +7,5 @@ authors: "Matthew Kukla <matt.kukla@yandex.ru>"
 bug-reports: "Matthew Kukla <matt.kukla@yandex.ru>"
 license: "GPL-3.0"
 homepage: "https://mkukla.net/doc/tofn/"
-depends: ["ocaml" "ocamlbuild"]
+depends: ["ocaml" "dune" {>= "2.9"}]
 build: [["dune" "build" "-p" name "-j" jobs "@install" ]]

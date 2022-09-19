@@ -35,6 +35,9 @@ types match.  Raises [OFN_type_mistmatch] if arguments are not of the same
 type. *)
 val tuplemap_safe : (float -> float -> float) -> tofn -> tofn -> tofn
 
+(** Inverses of base functions *)
+val inv : family -> float -> float
+
 (** OFN addition. *)
 val ( |+| ) : tofn -> tofn -> tofn
 
@@ -47,14 +50,14 @@ val ( |*| ) : tofn -> tofn -> tofn
 (** OFN division *)
 val ( |/| ) : tofn -> tofn -> tofn
 
-(** Check if an OFN is proper. *)
-val is_proper : tofn -> bool
-
 (** Determine if an OFN is increasing. *)
 val is_increasing : tofn -> bool
 
 (** Determine if an OFN is decreasing. *)
 val is_decreasing : tofn -> bool
+
+(** Check if an OFN is proper. *)                                                   
+val is_proper : tofn -> bool    
 
 (** The membership function associated to an OFN.  Raises [Improper_OFN] if the OFN 
 is improper. *)

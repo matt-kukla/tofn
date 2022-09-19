@@ -31,6 +31,11 @@ let tuplemap_safe f x y =
     }
     else raise OFN_type_mismatch
 
+let inv f =
+match f with 
+    | Trapezoidal -> fun x -> x
+    | Gaussian -> fun x -> -0.5 *. (x**2.)
+    | Exponential -> fun x -> log x
 
 (* Arithmetic operations *)
 let (|+|) x y = tuplemap_safe (+.) x y
@@ -40,17 +45,20 @@ let (|-|) x y = tuplemap_safe (-.) x y
 let (|*|) x y = tuplemap_safe ( *. ) x y
 
 let (|/|) x y = 
-    if y.au == 0. || y.bu == 0. || y.ad == 0. || y.bd == 0. 
+    if y.au = 0. || y.bu = 0. || y.ad = 0. || y.bd = 0. 
     then raise Division_by_zero 
     else tuplemap_safe (/.) x y 
 
-let is_proper x = (x.au <= x.bu  && x.bu <= x.ad && x.ad <= x.bd) ||
-                  (x.au >= x.bu  && x.bu >= x.ad && x.ad >= x.bd) ||
-                  (x.au = 0. && x.ad = 0. && x.bu <> 0. && x.bd <> 0.)
+let is_increasing x = x.au > 0. 
 
-let is_increasing x = (is_proper x) && (x.au > 0.) && (x.ad < 0.)
+let is_decreasing x = x.au < 0.
 
-let is_decreasing x = (is_proper x) && (x.au < 0.) && (x.ad > 0.)
+let is_proper x = 
+    if (x.au = 0. && x.ad != 0.) || ((x.au != 0. && x.ad = 0.)) then true
+    else if (x.au > 0. && x.ad > 0.) || (x.au < 0. && x.ad < 0.) then false
+    else if let a = (inv x.ofn_type) (x.bd -. x.bu) /. (x.au -. x.ad)
+        in (0. <= a ) && (a < 1.) then false
+    else true
 
 let membership x = 
     if not (is_proper x) then raise Improper_OFN else
@@ -73,8 +81,8 @@ let membership x =
 
     in 
         match x.ofn_type with
-            | Trapezoidal -> (mem (fun z ->  z) (fun z -> z))  
-            | Gaussian -> (mem (fun z -> -2. *. log z) (fun z -> -0.5 *. (z**2.))) 
-            | Exponential -> (mem (fun z -> exp z) (fun z -> log z))
+            | Trapezoidal -> mem (fun z ->  z) (inv Trapezoidal)  
+            | Gaussian -> mem (fun z -> -2. *. log z) (inv Gaussian) 
+            | Exponential -> mem (fun z -> exp z) (inv Exponential)
 
 let conv_ofn x f = {ofn_type=f ; au = x.au; bu = x.bu; ad = x.ad; bd = x.bd;}

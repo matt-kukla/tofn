@@ -35,6 +35,9 @@ types match.  Raises [OFN_type_mistmatch] if arguments are not of the same
 type. *)
 val tuplemap_safe : (float -> float -> float) -> tofn -> tofn -> tofn
 
+(** Base functions for each family. *)
+val base_function : family -> float -> float
+
 (** Inverses of base functions *)
 val inv : family -> float -> float
 
@@ -56,12 +59,12 @@ val is_increasing : tofn -> bool
 (** Determine if an OFN is decreasing. *)
 val is_decreasing : tofn -> bool
 
-(** Check if an OFN is proper. *)                                                   
+(** Detect if an OFN has a type I or type II pathology (see Section 1.4 of
+{{:https://arxiv.org/abs/2010.07764} the paper}.  Type III pathologies 
+are automatically fixed by [membership]. **)                            
 val is_proper : tofn -> bool    
 
 (** The membership function associated to an OFN.  Raises [Improper_OFN] if the OFN 
-is improper. *)
+is improper.  Automatically fixes {{:https://arxiv.org/abs/2010.07764} 
+type III pathologies}. *)
 val membership : tofn -> float -> float
-
-(** Convert an OFN of one type to another type. *)
-val conv_ofn : tofn -> family -> tofn

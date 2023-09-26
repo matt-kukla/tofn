@@ -11,7 +11,7 @@ type tofn = {
     bd : float; 
 }
 
-let sametype x y = x.ofn_type == y.ofn_type
+let sametype x y = x.ofn_type = y.ofn_type
 
 let tuplemap f x y = {  
     ofn_type = x.ofn_type; 
@@ -31,11 +31,18 @@ let tuplemap_safe f x y =
     }
     else raise OFN_type_mismatch
 
+let base_function f = 
+match f with
+    | Trapezoidal -> fun x -> x
+    | Gaussian -> fun x -> sqrt(-2. *. log x)
+    | Exponential -> fun x -> exp x
+
 let inv f =
 match f with 
     | Trapezoidal -> fun x -> x
-    | Gaussian -> fun x -> -0.5 *. (x**2.)
+    | Gaussian -> fun x -> exp (-0.5 *. x**2. )
     | Exponential -> fun x -> log x
+
 
 (* Arithmetic operations *)
 let (|+|) x y = tuplemap_safe (+.) x y
@@ -54,35 +61,52 @@ let is_increasing x = x.au > 0.
 let is_decreasing x = x.au < 0.
 
 let is_proper x = 
-    if (x.au = 0. && x.ad != 0.) || ((x.au != 0. && x.ad = 0.)) then true
-    else if (x.au > 0. && x.ad > 0.) || (x.au < 0. && x.ad < 0.) then false
-    else if let a = (inv x.ofn_type) (x.bd -. x.bu) /. (x.au -. x.ad)
-        in (0. <= a ) && (a < 1.) then false
+    let sgn a = 
+        match a with 
+            | 0. -> 0.
+            | _ -> ( a /. (abs_float a))
+    in
+    if sgn x.au = sgn x.ad then false 
     else true
 
 let membership x = 
     if not (is_proper x) then raise Improper_OFN else
-    let mem f fi y =
-        if is_increasing x then
-            if y >= (x.au *. (f 0.) +. x.bu) && y < (x.au *. (f 1.) +. x.bu) 
-                then fi ((y -. x.bu) /. x.au)
-            else if y > (x.ad *. (f 1.) +. x.bd) &&  y <= (x.au *. (f 0.) +. x.bu)
-                then fi ((y -. x.bd) /. x.ad)
-            else 1. 
+    let f = base_function x.ofn_type and fi = inv x.ofn_type in
+    
+    (* OFNs without compact support must be treated separately. *)
+    
+    match x.ofn_type with
+        | Gaussian | Exponential -> 
+            if is_increasing x then fun y ->
+                if  y < x.bu then fi ((y -. x.bu) /. x.au)
+                else if (y >= x.bu && y <= x.bd) then 1.
+                else if y > x.bd then fi ((y -. x.bd) /. x.ad)
+                else 0.
+            else fun y ->
+                if  y < x.bd then fi ((y -. x.bd) /. x.ad)
+                else if (y <= x.bd && y >= x.bu) then 1.
+                else if y > x.bu then fi ((y -. x.bu) /. x.au)
+                else 1.
+        | Trapezoidal -> 
+            if is_increasing x then fun y -> 
+            let x0 = fi (-.x.bu /. x.au) in
+            let x1 = fi (1. -. x.bu) /. x.au in
+            let x2 = fi (1. -. x.bd) /. x.ad in
+            let x3 = fi (-.x.bd /. x.ad) in
 
-        else if (is_decreasing x) then
-            if y >= (x.au *. (f 0.) +. x.bu) && y < (x.au *. (f 1.) +. x.bu)
-                then fi ((y -. x.bd) /. x.ad)
-            else if y > (x.ad *. (f 1.) +. x.bd) &&  y <= (x.au *. (f 0.) +. x.bu)
-                then fi ((y -. x.bu) /. x.au)
-            else 1.
-        
-        else raise Improper_OFN
+                if y >= x0 && y < x1 then x.au *. f y +. x.bu
+                else if y >= x1 && y <= x2 then 1.
+                else if y > x2 && y <= x3 then x.ad *. f y +. x.bd
+                else 0.
+            
+            else fun y -> 
+                let x0 = fi (-.x.bd /. x.ad) in
+                let x1 = fi (1. -. x.bd) /. x.ad in
+                let x2 = fi (1. -. x.bu) /. x.au in
+                let x3 = fi (-.x.bu /. x.au) in
 
-    in 
-        match x.ofn_type with
-            | Trapezoidal -> mem (fun z ->  z) (inv Trapezoidal)  
-            | Gaussian -> mem (fun z -> -2. *. log z) (inv Gaussian) 
-            | Exponential -> mem (fun z -> exp z) (inv Exponential)
-
-let conv_ofn x f = {ofn_type=f ; au = x.au; bu = x.bu; ad = x.ad; bd = x.bd;}
+                if y >= x0 && y < x1 then x.ad *. f y +. x.bd
+                else if y >= x1 && y <= x2 then 1.
+                else if y > x2 && y <= x3 then x.au *. f y +. x.bu
+                else 0.
+                

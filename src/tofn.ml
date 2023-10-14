@@ -71,7 +71,7 @@ let is_proper x =
 
 let membership x = 
     if not (is_proper x) then raise Improper_OFN else
-    let f = base_function x.ofn_type and fi = inv x.ofn_type in
+    let  fi = inv x.ofn_type in
     
     (* OFNs without compact support must be treated separately. *)
     
@@ -87,26 +87,23 @@ let membership x =
                 else if (y <= x.bd && y >= x.bu) then 1.
                 else if y > x.bu then fi ((y -. x.bu) /. x.au)
                 else 1.
-        | Trapezoidal -> 
-            if is_increasing x then fun y -> 
-            let x0 = fi (-.x.bu /. x.au) in
-            let x1 = fi (1. -. x.bu) /. x.au in
-            let x2 = fi (1. -. x.bd) /. x.ad in
-            let x3 = fi (-.x.bd /. x.ad) in
+        | Trapezoidal -> if is_increasing x then fun y ->
+            if y <= x.bu then 0.
+            else if (y > x.bu && y <= x.au +. x.bu) 
+                then (y -. x.bu) /. x.au
+            else if (y >= x.au +. x.bu) && (y <= x.ad +. x.bd) 
+                then 1.
+            else if (y > x.ad +. x.bd) && ( y <= x.bd )
+                then (y -. x.bd) /. x.ad
+            else 0.
+        else fun y -> 
+            if y <= x.bd then 0.
+            else if (y > x.bd && y <= x.ad +. x.bd)
+                then (y -. x.bd) /. x.ad
+            else if (y >= x.ad +. x.bd) && (y <= x.au +. x.bu)             
+                then 1.
+            else if (y > x.au +. x.bu) && ( y <= x.bu )                    
+                then (y -. x.bu) /. x.au
+            else 0.
 
-                if y >= x0 && y < x1 then x.au *. f y +. x.bu
-                else if y >= x1 && y <= x2 then 1.
-                else if y > x2 && y <= x3 then x.ad *. f y +. x.bd
-                else 0.
-            
-            else fun y -> 
-                let x0 = fi (-.x.bd /. x.ad) in
-                let x1 = fi (1. -. x.bd) /. x.ad in
-                let x2 = fi (1. -. x.bu) /. x.au in
-                let x3 = fi (-.x.bu /. x.au) in
-
-                if y >= x0 && y < x1 then x.ad *. f y +. x.bd
-                else if y >= x1 && y <= x2 then 1.
-                else if y > x2 && y <= x3 then x.au *. f y +. x.bu
-                else 0.
-                
+let flip x = {ofn_type = x.ofn_type; au = x.ad; bu = x.bd; ad = x.au; bd = x.bu}

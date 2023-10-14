@@ -68,3 +68,6 @@ val is_proper : tofn -> bool
 is improper.  Automatically fixes {{:https://arxiv.org/abs/2010.07764} 
 type III pathologies}. *)
 val membership : tofn -> float -> float
+
+(** Transpose the up/down functions of an OFN. *)
+val flip : tofn -> tofn

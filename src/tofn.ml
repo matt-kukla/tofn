@@ -67,6 +67,8 @@ let is_proper x =
             | _ -> ( a /. (abs_float a))
     in
     if sgn x.au = sgn x.ad then false 
+    else if (inv x.ofn_type) ((x.bu -. x.bd) /. (x.ad -. x.au)) < 1.
+        then false
     else true
 
 let membership x = 

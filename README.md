@@ -26,7 +26,10 @@ This library implements several common families of TOFNs and their
 associated arithemetic operations.
 
 ## Installation
-Available on opam, run `opam install tofn`.
+To build/install the contents of this repository locally, run 
+`dune build`, followed by `dune install`.
+
+This package may also be installed from opam with `opam install tofn`.
 
 ## Documentation
 Documentation can be built with ```ocamldoc```, or accessed [online](http://mkukla.net/doc/tofn/Tofn.html).

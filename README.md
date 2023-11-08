@@ -15,13 +15,13 @@ accumulated uncertainty to be reversed without introducing further
 approximations.  Orientation has also proven extremely useful for modeling
 temporal data.
 
-Typed ordered fuzzy numbers (TOFNs) are constructed from functions of a
-common family or *type*.  Arithmetic operations between TOFNs are 
+Typed ordered fuzzy numbers (TOFNs) are OFNS constructed from functions of a common family or *type*.  Arithmetic operations between TOFNs are 
 intended to preserve both the type and (fuzzy) set-theoretic
 properties of their operands.
 
-The general theory and construction of TOFNs may be found in
-[Rings of Typed Ordered Fuzzy Numbers](https://arxiv.org/abs/2010.07764).
+The general theory and construction of TOFNs, along with a discussion of
+imprecision control, may be found in
+*[Rings of Typed Ordered Fuzzy Numbers](https://arxiv.org/abs/2010.07764)*.
 This library implements several common families of TOFNs and their 
 associated arithemetic operations.
 

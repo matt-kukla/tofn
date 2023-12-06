@@ -12,7 +12,7 @@ Ordered fuzzy numbers (OFNs) remedy this issue by augmenting fuzzy numbers
 with a notion of *orientation* or *trend*.  This gives
 arithmetic operations with unique additive inverses, allowing 
 accumulated uncertainty to be reversed.  Orientation has also proven 
-useful for modeling temporal data.
+useful for modeling [temporal data](https://arxiv.org/abs/2011.01980).
 
 Typed ordered fuzzy numbers (TOFNs) are OFNS constructed from functions of a common family or *type*.  Arithmetic operations between TOFNs are 
 intended to preserve both the type and (fuzzy) set-theoretic

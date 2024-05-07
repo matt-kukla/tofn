@@ -4,8 +4,8 @@ in OCaml.
 
 ## Introduction
 Arithmetic operations on fuzzy numbers are traditionally carried out via 
-interval-based methods.  However, these operations are prone to 
-accumulating uncertainty, which presents issues in situations where many operations are performed in succession (e.g fuzzy autoregressive models, 
+interval-based methods.  However, these are prone to 
+accumulating uncertainty, presenting issues when many operations are performed in succession (e.g fuzzy autoregressive models, 
 aggregations).
 
 Ordered fuzzy numbers (OFNs) remedy this issue by augmenting fuzzy numbers
@@ -15,8 +15,8 @@ accumulated uncertainty to be reversed.  Orientation has also proven
 useful for modeling [temporal data](https://arxiv.org/abs/2011.01980).
 
 Typed ordered fuzzy numbers (TOFNs) are OFNS constructed from functions of a common family or *type*.  Arithmetic operations between TOFNs are 
-intended to preserve both the type and (fuzzy) set-theoretic
-properties of their operands.
+intended to preserve both the operands' type and (fuzzy) set-theoretic
+properties.
 
 The general theory and construction of TOFNs, along with a discussion of
 imprecision control, may be found in

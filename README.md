@@ -9,7 +9,7 @@ accumulating uncertainty, presenting issues when many operations are performed i
 aggregations).
 
 Ordered fuzzy numbers (OFNs) remedy this issue by augmenting fuzzy numbers
-with a notion of *orientation* or *trend*.  This gives
+with a notion of *orientation* or *trend*.  This yields
 arithmetic operations with unique additive inverses, allowing 
 accumulated uncertainty to be reversed.  Orientation has also proven 
 useful for modeling [temporal data](https://arxiv.org/abs/2011.01980).
